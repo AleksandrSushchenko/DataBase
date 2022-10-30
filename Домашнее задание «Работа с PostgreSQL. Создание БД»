@@ -18,39 +18,27 @@ CREATE TABLE "track" (
   "id_track" int PRIMARY KEY,
   "name_track" varchar(80),
   "duratione" int,
-  "id_album" int
+  "id_album" int references album(id_album)
 );
-
-CREATE TABLE "generes_and_artists" (
-  "id_generes_artist" int PRIMARY KEY,
-  "id_genere" int,
-  "id_artist" int
-);
-
-CREATE TABLE "artists_album" (
-  "id_artist_album" int PRIMARY KEY,
-  "id_album" int,
-  "id_artist" int
-);
-
 CREATE TABLE "collection" (
   "id_collection" int PRIMARY KEY,
   "name_collection" varchar(80),
   "release_collection" date,
-  "id_album" int,
-  "id_track" int
+  "id_album" int references album(id_album),
+  "id_track" int references track(id_track)
 );
 
-ALTER TABLE "album" ADD FOREIGN KEY ("id_album") REFERENCES "track" ("id_album");
+CREATE TABLE "artists_album" (
+  "id_artist_album" int PRIMARY KEY,
+  "id_album" int references album(id_album),
+  "id_artist" int references artists(id_artist)
+);
 
-ALTER TABLE "generes" ADD FOREIGN KEY ("id_genere") REFERENCES "generes_and_artists" ("id_genere");
+CREATE TABLE "generes_and_artists" (
+  "id_generes_artist" int PRIMARY KEY,
+  "id_genere" int references generes(id_genere),
+  "id_artist" int references artists(id_artist)
+);
 
-ALTER TABLE "artists" ADD FOREIGN KEY ("id_artist") REFERENCES "generes_and_artists" ("id_artist");
 
-ALTER TABLE "album" ADD FOREIGN KEY ("id_album") REFERENCES "artists_album" ("id_album");
 
-ALTER TABLE "artists" ADD FOREIGN KEY ("id_artist") REFERENCES "artists_album" ("id_artist");
-
-ALTER TABLE "album" ADD FOREIGN KEY ("id_album") REFERENCES "collection" ("id_album");
-
-ALTER TABLE "track" ADD FOREIGN KEY ("id_track") REFERENCES "collection" ("id_track");
